@@ -13,6 +13,15 @@ class Client(models.Model):
                                null=True)
     phonenumber = models.CharField(verbose_name='Номер телефона',
                                    max_length=50)
+
+    @property
+    def user_email(self):
+        return self.user.email
+
+    @property
+    def user_name(self):
+        return self.user.first_name
+
     class Meta:
         verbose_name = 'клиент'
         verbose_name_plural = 'клиенты'
