@@ -55,8 +55,10 @@ def boxes(request):
 def my_rent(request):
     context = {}
     if 'user_name' in request.session:
+        client = Client.objects.get(user=request.user)
         context = {
             'username': request.session['user_name'],
+            'email': client.user_email,
             }
     return render(request, 'my-rent.html', context=context)
 
