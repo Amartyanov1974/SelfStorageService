@@ -26,5 +26,5 @@ urlpatterns = [
     path('faq', views.faq, name='faq'),
     path('boxes', views.boxes, name='boxes'),
     path('my_rent', views.my_rent, name='my_rent'),
-    path('my_rent_empty', views.my_rent_empty, name='my_rent_empty'),
+    path('deauth', views.deauth, name='deauth'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -12,7 +12,9 @@ class Client(models.Model):
                                blank=True,
                                null=True)
     phonenumber = models.CharField(verbose_name='Номер телефона',
-                                   max_length=50)
+                                   max_length=50,
+                                   null=True,
+                                   blank=True)
 
     @property
     def user_email(self):

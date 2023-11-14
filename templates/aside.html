@@ -1,5 +1,4 @@
 {% load static %}
-
 <aside class="modal fade" id="RegModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-scrollable modal-fullscreen">
         <div class="modal-content">
@@ -9,15 +8,8 @@
             <div class="modal-body d-flex justify-content-center align-items-center">
                 <form method="POST" action="/" class="d-flex flex-column align-items-center" style="max-width: 420px">
                   {% csrf_token %}
-                    {% if message%}
-                      <dialog open id="closeMe" class="modal-body d-flex justify-content-center align-items-center" aria-modal="true">
-                        <h2 class="text-center"><strong>{{message}}</strong></h2>
-                          <form method="dialog"><br>
-                            <center><button type="submit" class="btn border-8 py-3 px-5 mt-5 mb-3 w-100 text-white fs_24 SelfStorage__bg_orange SelfStorage__btn2_orange">Закрыть</button></center>
-                          </form>
-                        </dialog>
-                    {% endif %}
                     <h1 class="modal-title text-center fw-bold mb-3">Регистрация</h1>
+                    <input type="text" required name="NAME_CREATE" class="form-control border-8 mb-4 py-3 px-5 border-0 fs_24 SelfStorage__bg_lightgrey" placeholder="Имя">
                     <input type="email" required name="EMAIL_CREATE" class="form-control border-8 mb-4 py-3 px-5 border-0 fs_24 SelfStorage__bg_lightgrey" placeholder="E-mail">
                     <input type="text" required name="PASSWORD_CREATE" class="form-control border-8 mb-4 py-3 px-5 border-0 fs_24 SelfStorage__bg_lightgrey" placeholder="Пароль" >
                     <input type="text" required name="PASSWORD_CONFIRM" class="form-control border-8 mb-4 py-3 px-5 border-0 fs_24 SelfStorage__bg_lightgrey" placeholder="Подтверждение пароля">
@@ -67,3 +59,4 @@
         </div>
     </div>
 </aside>
+
