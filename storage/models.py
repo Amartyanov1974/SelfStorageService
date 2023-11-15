@@ -29,4 +29,70 @@ class Client(models.Model):
         verbose_name_plural = 'клиенты'
 
     def __str__(self):
-        return f'{self.user}: {self.address}, {self.phonenumber}'
+        return f'{self.user_name}: {self.address}, {self.phonenumber}'
+
+
+class Storage(models.Model):
+    numer = models.IntegerField(verbose_name='Номер склада')
+    address = models.TextField(verbose_name='Адрес склада')
+    feature = models.CharField(max_length=25, verbose_name='Особенность')
+
+    def __str__(self):
+        return f'{self.numer} {self.address}'
+
+    class Meta:
+        verbose_name = 'Склад'
+        verbose_name_plural = 'Склады'
+
+
+class Box(models.Model):
+    name = models.CharField(max_length=25, verbose_name='Обозначение')
+    storage = models.ForeignKey(Storage, verbose_name='Склад',
+                                on_delete=models.CASCADE,
+                                related_name='boxes')
+    length = models.FloatField(verbose_name='Длина')
+    width = models.FloatField(verbose_name='Ширина')
+    height = models.FloatField(verbose_name='Высота')
+    price = models.IntegerField(verbose_name='Цена')
+
+    def __str__(self):
+        return f'{self.name}({self.length}x{self.width}x{self.height} м)'
+
+    class Meta:
+        verbose_name = 'Бокс'
+        verbose_name_plural = 'Боксы'
+
+
+class Order(models.Model):
+    client = models.ForeignKey(Client,
+                               on_delete=models.CASCADE,
+                               related_name='orders',
+                               verbose_name='Клиент')
+    created_at = models.DateTimeField(verbose_name='Создано',
+                                      auto_now_add=True)
+    box = models.ForeignKey(Box,
+                            on_delete=models.CASCADE,
+                            related_name='orders',
+                            verbose_name='Бокс',
+                            null=True,
+                            blank=True)
+    paid_with = models.DateField(verbose_name="Оплачено c",
+                                 null=True,
+                                 blank=True)
+    price = models.IntegerField(verbose_name='Стоимость')
+
+    size = models.CharField(max_length=50,
+                            verbose_name='Размер',
+                            null=True,
+                            blank=True)
+
+    @property
+    def storage(self):
+        return self.box.storage
+
+    def __str__(self):
+        return f'#{self.pk} {self.client} {self.storage} {self.box}'
+
+    class Meta:
+        verbose_name = 'Заказ'
+        verbose_name_plural = 'Заказы'

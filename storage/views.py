@@ -17,7 +17,6 @@ def index(request):
         request.session['message'] =''
 
     elif 'EMAIL_CREATE' in request.POST:
-        print(f'EMAIL_CREATE: ', request.POST['EMAIL_CREATE'])
         registration(request)
         return redirect('/')
 
