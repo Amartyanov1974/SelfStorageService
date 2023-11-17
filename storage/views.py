@@ -65,7 +65,7 @@ def generate_qr_code(request):
         border=4,
     )
 # данные где забрать заказ
-    client_data = Client.objects.get(user=1)
+    client_data = Client.objects.get(user=request.user)
     qr.add_data(client_data)
     qr.make(fit=True)
 
@@ -85,5 +85,3 @@ def my_rent(request):
             'email': client.user_email,
             }
     return render(request, 'my-rent.html', context=context)
-
-
