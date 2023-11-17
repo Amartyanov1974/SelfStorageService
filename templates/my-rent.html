@@ -35,50 +35,73 @@
             <button class="ps-0 btn bg-white fs_24 shadow-none SelfStorage_orange SelfStorage_tab active" id="LK-tab" data-bs-toggle="pill" data-bs-target="#LK" type="button" role="tab" aria-controls="LK" aria-selected="true">Личный кабинет</button>
             <button class="ps-0 btn bg-white fs_24 shadow-none SelfStorage_grey SelfStorage_tab" id="Rent-tab" data-bs-toggle="pill" data-bs-target="#Rent" type="button" role="tab" aria-controls="Rent" aria-selected="false">Моя аренда</button>
             <a href="faq" class="btn fs_24 shadow-none text-decoration-none SelfStorage_grey SelfStorage_tab">FAQ</a>
-            <a href="#" class="btn fs_24 shadow-none text-decoration-none SelfStorage_grey SelfStorage_tab">Выйти</a>
+            <a href="deauth" class="btn fs_24 shadow-none text-decoration-none SelfStorage_grey SelfStorage_tab">Выйти</a>
         </div>
         <div class="col-lg-9">
             <div class="card tab-content p-5">
                 <div class="tab-pane fade show active" id="LK" role="tabpanel" aria-labelledby="LK-tab">
+                  <h3  class="text-center">{{username}}</h3>
+                   <form method="POST" action="my_rent">
+                    {% csrf_token %}
                     <div class="row">
-                        <div class="col-12 col-sm-5 d-flex flex-column align-items-center">
-                            <!--img src="{% static 'img/image10.png' %}" class="rounded-pill mb-3" alt=""-->
-                            <h4>{{username}}</h4>
+                        <div class="col-12 col-sm-5 d-flex flex-column">
+                            <label class="fs_24 SelfStorage_green ms-2" for="EMAIL">E-mail</label>
+                            <input type="email" required name="EMAIL_EDIT" id="EMAIL" class="form-control fs_24 ps-2 SelfStorage__input" value="{{client.user_email}}" disabled>
+                            <!--label class="fs_24 SelfStorage_green ms-2" for="PASSWORD">Пароль</label>
+                            <input type="password" required name="PASSWORD_EDIT" id="PASSWORD" class="form-control fs_24 ps-2 SelfStorage__input" placeholder="********" disabled>
+                            <button type="submit" class="btn SelfStorage_green ps-1" id="save1" style="display: none">Сохранить</button>
+                            <a class="btn SelfStorage_orange ps-1" id="edit1">Редактировать</a>
+                            <script>
+                                document.getElementById('edit1').addEventListener('click', e => {
+                                    e.preventDefault()
+                                    document.getElementById('EMAIL').disabled = false
+                                    document.getElementById('PASSWORD').disabled = false
+                                    document.getElementById('PASSWORD').type = 'text'
+                                    document.getElementById('edit1').style.display = 'none'
+                                    document.getElementById('save1').style.display = 'inline-block'
+                                })
+                                document.getElementById('save1').addEventListener('click', () => {
+                                    setTimeout(() => {
+                                        document.getElementById('EMAIL').disabled = true
+                                        document.getElementById('PASSWORD').disabled = true
+                                        document.getElementById('PASSWORD').type = 'password'
+                                        document.getElementById('edit1').style.display = 'inline-block'
+                                        document.getElementById('save1').style.display = 'none'
+                                    }, 0)
+                                })
+                            </script-->
                         </div>
+
+                        {% csrf_token %}
                         <div class="col-12 col-sm-7 d-flex flex-column">
-                            <form>
-                                <label class="fs_24 SelfStorage_green ms-2" for="EMAIL">E-mail</label>
-                                <input type="email" name="EMAIL_EDIT" id="EMAIL" class="form-control fs_24 ps-2 SelfStorage__input" value={{email}} disabled>
-                                <label class="fs_24 SelfStorage_green ms-2" for="PHONE">Телефон</label>
-                                <input type="tel" name="PHONE_EDIT" id="PHONE" class="form-control fs_24 ps-2 SelfStorage__input" value="+7-909-000-00-00" disabled>
-                                <label class="fs_24 SelfStorage_green ms-2" for="PASSWORD">Пароль</label>
-                                <input type="password" name="PASSWORD_EDIT" id="PASSWORD" class="form-control fs_24 ps-2 SelfStorage__input" value="111111111" disabled>
-                                <button type="submit" class="btn SelfStorage_green ps-1" id="save" style="display: none">Сохранить</button>
-                                <a class="btn SelfStorage_orange ps-1" id="edit">Редактировать</a>
-                                <script>
-                                    document.getElementById('edit').addEventListener('click', e => {
-                                        e.preventDefault()
-                                        document.getElementById('EMAIL').disabled = false
-                                        document.getElementById('PHONE').disabled = false
-                                        document.getElementById('PASSWORD').disabled = false
-                                        document.getElementById('PASSWORD').type = 'text'
-                                        document.getElementById('edit').style.display = 'none'
-                                        document.getElementById('save').style.display = 'inline-block'
-                                    })
-                                    document.getElementById('save').addEventListener('click', () => {
-                                        setTimeout(() => {
-                                            document.getElementById('EMAIL').disabled = true
-                                            document.getElementById('PHONE').disabled = true
-                                            document.getElementById('PASSWORD').disabled = true
-                                            document.getElementById('PASSWORD').type = 'password'
-                                            document.getElementById('edit').style.display = 'inline-block'
-                                            document.getElementById('save').style.display = 'none'
-                                        }, 0)
-                                    })
-                                </script>
-                            </form>
+                            <label class="fs_24 SelfStorage_green ms-2" for="PHONE">Телефон</label>
+                            <input type="tel" name="PHONE_EDIT" id="PHONE" class="form-control fs_24 ps-2 SelfStorage__input" placeholder="Ваш телефонный номер" value="{{client.phonenumber}}" disabled>
+                            <label class="fs_24 SelfStorage_green ms-2" for="ADDRESS">Адрес</label>
+                            <textarea  rows=3 name="ADDRESS_EDIT" id="ADDRESS" class="form-control fs_24 ps-2 SelfStorage__input" placeholder="Ваш адрес" disabled>{{client.address}}</textarea>
+                            <button type="submit" class="btn SelfStorage_green ps-1" id="save2" style="display: none">Сохранить</button>
+                            <a class="btn SelfStorage_orange ps-1" id="edit2">Редактировать</a>
+                            <script>
+                                document.getElementById('edit2').addEventListener('click', e => {
+                                    e.preventDefault()
+                                    document.getElementById('ADDRESS').disabled = false
+
+                                    document.getElementById('PHONE').disabled = false
+
+                                    document.getElementById('edit2').style.display = 'none'
+                                    document.getElementById('save2').style.display = 'inline-block'
+                                })
+                                document.getElementById('save2').addEventListener('click', () => {
+                                    setTimeout(() => {
+                                        document.getElementById('ADDRESS').disabled = true
+                                        document.getElementById('PHONE').disabled = true
+                                        document.getElementById('edit2').style.display = 'inline-block'
+                                        document.getElementById('save2').style.display = 'none'
+                                    }, 0)
+                                })
+                            </script>
                         </div>
                     </div>
+                  </form>
                 </div>
                 <div class="tab-pane fade" id="Rent" role="tabpanel" aria-labelledby="Rent-tab">
                     <h1 class="fw-bold SelfStorage_green mb-5">Добрый день, {{username}}!</h1>
@@ -100,23 +123,22 @@
                             <button id="closeButton">Закрыть</button>
                         </div>
                         <div id="overlay" onclick="closeModal()"></div>
-                        
+
                         <script>
                             function openModal() {
                                 var xhr = new XMLHttpRequest();
                                 xhr.open("GET", "{% url 'generate_qr_code' %}", true);
                                 xhr.responseType = "blob";
-                        
+
                                 xhr.onload = function () {
                                     if (xhr.status === 200) {
                                         var imageUrl = URL.createObjectURL(xhr.response);
                                         document.getElementById('myModal').innerHTML = '<img src="' + imageUrl + '" alt="QR Code">';
                                         document.getElementById('myModal').style.display = 'block';
                                         document.getElementById('overlay').style.display = 'block';
-                                        
                                     }
                                 };
-                        
+
                                 xhr.send();
                             }
                             function closeModal() {

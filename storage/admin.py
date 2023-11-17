@@ -1,8 +1,10 @@
 from django.contrib import admin
 from django.core.management import call_command
+from django.contrib.auth.models import User
 
 from storage.models import Client, Box, Storage, Order
 
+User._meta.get_field('email')._unique = True
 
 class OrderInline(admin.TabularInline):
     model = Order

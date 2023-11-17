@@ -4,10 +4,12 @@ from django.contrib.auth import login, logout, authenticate
 from django.shortcuts import render, redirect
 from django.core.mail import send_mail
 from django.contrib.auth.models import User
+from django.db import transaction
 from django.conf import settings
 
 from storage.models import Client
 
+User._meta.get_field('email')._unique = True
 
 def auth(request):
     """ Авторизация пользователя
@@ -20,7 +22,7 @@ def auth(request):
     try:
         user = authenticate(username=username, password=password)
     except:
-        user=None
+        user = None
     if not user:
         request.session['message'] = 'Ошибка авторизации'
         return 0
@@ -110,7 +112,7 @@ def sendpasswd(request):
     EMAIL_USE_SSL
     Подробности: https://djangodoc.ru/3.2/topics/email/
     """
-    email=request.POST['EMAIL_FORGET']
+    email = request.POST['EMAIL_FORGET']
     try:
         user = User.objects.get(email=email)
     except:
@@ -133,4 +135,13 @@ def sendpasswd(request):
     except:
         request.session['message'] = 'Сбой отправки почты'
         return 0
+    return 0
+
+
+def update_client(request):
+    address = request.POST['ADDRESS_EDIT']
+    phonenumber = request.POST['PHONE_EDIT']
+    client, created = Client.objects.update_or_create(
+        user=request.user,
+        defaults={'address': address, 'phonenumber': phonenumber})
     return 0

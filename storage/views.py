@@ -7,9 +7,11 @@ from django.http import HttpResponse
 from django.shortcuts import redirect, render
 from django.template import loader
 
-from storage.actions import auth, deauth, registration, send_message, sendpasswd
+from storage.actions import (
+    auth, deauth, registration, send_message, sendpasswd, update_client)
 from storage.models import Client
 
+User._meta.get_field('email')._unique = True
 
 def index(request):
     context = {}
@@ -76,12 +78,16 @@ def generate_qr_code(request):
     return response
 
 
+
+
 def my_rent(request):
     context = {}
+    if 'PHONE_EDIT' in request.POST:
+        update_client(request)
     if 'user_name' in request.session:
         client = Client.objects.get(user=request.user)
         context = {
             'username': request.session['user_name'],
-            'email': client.user_email,
+            'client': client,
             }
     return render(request, 'my-rent.html', context=context)
