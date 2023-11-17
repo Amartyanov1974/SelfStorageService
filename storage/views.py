@@ -1,9 +1,15 @@
-from django.shortcuts import render, redirect
-from django.contrib.auth.models import User
+import qrcode
 from django.conf import settings
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.models import User
+from django.core.mail import send_mail
+from django.http import HttpResponse
+from django.shortcuts import redirect, render
+from django.template import loader
 
+from storage.actions import auth, deauth, registration, send_message
 from storage.models import Client
-from storage.actions import auth, registration, deauth, send_message
+
 
 def index(request):
     context = {}
@@ -46,6 +52,25 @@ def boxes(request):
             'username': request.session['user_name'],
             }
     return render(request, 'boxes.html', context=context)
+
+
+def generate_qr_code(request):
+    qr = qrcode.QRCode(
+        version=1,
+        error_correction=qrcode.constants.ERROR_CORRECT_L,
+        box_size=10,
+        border=4,
+    )
+# данные где забрать заказ
+    client_data = Client.objects.get(user=1)
+    qr.add_data(client_data)
+    qr.make(fit=True)
+
+    img = qr.make_image(fill_color="black", back_color="white")
+
+    response = HttpResponse(content_type="image/png")
+    img.save(response, "PNG")
+    return response
 
 
 def my_rent(request):
