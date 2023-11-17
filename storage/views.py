@@ -85,10 +85,12 @@ def my_rent(request):
         update_client(request)
     if 'user_name' in request.session:
         client = Client.objects.get(user=request.user)
+        orders = list(client.orders.all().prefetch_related('box'))
         context = {
             'username': request.session['user_name'],
             'client': client,
-        }
+            'orders': orders,
+            }
     return render(request, 'my-rent.html', context=context)
 
 

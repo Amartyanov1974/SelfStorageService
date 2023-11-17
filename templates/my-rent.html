@@ -106,59 +106,49 @@
                 <div class="tab-pane fade" id="Rent" role="tabpanel" aria-labelledby="Rent-tab">
                     <h1 class="fw-bold SelfStorage_green mb-5">Добрый день, {{username}}!</h1>
                     <a href="#" class="SelfStorage_orange">История аренды</a>
-                    <h4 class="SelfStorage_grey my-3">Срок Вашей аренды подходит к концу :(<br>Вы можете продлить аренду или забрать вещи до 28 июня 2022 года включительно.</h4>
-                    <div class="mb-5">
-                        <h4 class="SelfStorage_green">Мой склад №1</h4>
-                        <h4>Одинцово, ул. Северная, д. 36</h4>
+                    <!--h4 class="SelfStorage_grey my-3">Срок Вашей аренды подходит к концу :(<br>Вы можете продлить аренду или забрать вещи до 28 июня 2022 года включительно.</h4-->
+                    {% for order in orders %}
+                      <div class="mb-5">
+                        <h4 class="SelfStorage_green">№ {{order.box.storage.numer}}</h4>
+                        <h4>{{order.box.storage.address}}</h4>
                         <h4 class="SelfStorage_green">Мой бокс</h4>
-                        <h4>№2389-12</h4>
+                        <h4>№ {{order.box.name}}</h4>
                         <h4 class="SelfStorage_green">Срок аренды</h4>
-                        <h4>15.03.2022 - 28.06.2022</h4>
+                        <h4>{{order.paid_with}} - </h4>
                         <div><button class="btn fs_24 px-5 py-3 text-white border-8 SelfStorage__bg_green SelfStorage__btn2_green mb-3">Продлить аренду</button></div>
                         <div><button onclick="openModal()"class="btn fs_24 px-5 py-3 text-white border-8 SelfStorage__bg_orange SelfStorage__btn2_orange mb-3">Открыть бокс</button></div>
                         <a href="#" class="SelfStorage_orange">Нужна помощь?</a>
-                        <div id="myModal">
-                            <p>Это всплывающее окно!</p>
-                            <img src="" alt="QR Code"> <!-- Пустой тег img для загрузки QR-кода -->
-                            <button id="closeButton">Закрыть</button>
-                        </div>
-                        <div id="overlay" onclick="closeModal()"></div>
-
-                        <script>
-                            function openModal() {
-                                var xhr = new XMLHttpRequest();
-                                xhr.open("GET", "{% url 'generate_qr_code' %}", true);
-                                xhr.responseType = "blob";
-
-                                xhr.onload = function () {
-                                    if (xhr.status === 200) {
-                                        var imageUrl = URL.createObjectURL(xhr.response);
-                                        document.getElementById('myModal').innerHTML = '<img src="' + imageUrl + '" alt="QR Code">';
-                                        document.getElementById('myModal').style.display = 'block';
-                                        document.getElementById('overlay').style.display = 'block';
-                                    }
-                                };
-
-                                xhr.send();
-                            }
-                            function closeModal() {
-                                document.getElementById('myModal').style.display = 'none';
-                                document.getElementById('overlay').style.display = 'none';
-                            }
-                        </script>
+                      </div>
+                    {% endfor %}
+                    <div id="myModal">
+                        <p>Это всплывающее окно!</p>
+                        <img src="" alt="QR Code"> <!-- Пустой тег img для загрузки QR-кода -->
+                        <button id="closeButton">Закрыть</button>
                     </div>
+                    <div id="overlay" onclick="closeModal()"></div>
 
-                    <div class="mb-5">
-                        <h4 class="SelfStorage_green">Мой склад №2</h4>
-                        <h4>Люберцы, ул. Советская, д. 88</h4>
-                        <h4 class="SelfStorage_green">Мой бокс</h4>
-                        <h4>№2335-10</h4>
-                        <h4 class="SelfStorage_green">Срок аренды</h4>
-                        <h4>18.03.2022 - 21.09.2022</h4>
-                        <div><button class="btn fs_24 px-5 py-3 text-white border-8 SelfStorage__bg_green SelfStorage__btn2_green mb-3">Продлить аренду</button></div>
-                        <div><button onclick="openModal()"class="btn fs_24 px-5 py-3 text-white border-8 SelfStorage__bg_orange SelfStorage__btn2_orange mb-3">Открыть бокс</button></div>
-                        <a href="#" class="SelfStorage_orange">Нужна помощь?</a>
-                    </div>
+                    <script>
+                        function openModal() {
+                            var xhr = new XMLHttpRequest();
+                            xhr.open("GET", "{% url 'generate_qr_code' %}", true);
+                            xhr.responseType = "blob";
+
+                            xhr.onload = function () {
+                                if (xhr.status === 200) {
+                                    var imageUrl = URL.createObjectURL(xhr.response);
+                                    document.getElementById('myModal').innerHTML = '<img src="' + imageUrl + '" alt="QR Code">';
+                                    document.getElementById('myModal').style.display = 'block';
+                                    document.getElementById('overlay').style.display = 'block';
+                                }
+                            };
+
+                            xhr.send();
+                        }
+                        function closeModal() {
+                            document.getElementById('myModal').style.display = 'none';
+                            document.getElementById('overlay').style.display = 'none';
+                        }
+                    </script>
                 </div>
             </div>
         </div>
