@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.db.models import Min
 
 
 class Client(models.Model):
@@ -32,10 +33,24 @@ class Client(models.Model):
         return f'{self.user_name}: {self.address}, {self.phonenumber}'
 
 
+class StorageQuerySet(models.QuerySet):
+    def get_boxes(self):
+        for storage in self:
+            storage.count_of_free_boxes = storage.boxes.filter(is_occupied=False).count()
+            storage.count_boxes = storage.boxes.count()
+            min_price = storage.boxes.aggregate(Min('price'))
+            storage.min_price = min_price['price__min']
+        return self
+
+
 class Storage(models.Model):
     numer = models.IntegerField(verbose_name='Номер склада')
+    city = models.CharField(max_length=25, verbose_name='Город склада', blank=True)
     address = models.TextField(verbose_name='Адрес склада')
-    feature = models.CharField(max_length=25, verbose_name='Особенность')
+    feature = models.CharField(max_length=25, verbose_name='Особенность склада')
+    image = models.ImageField(verbose_name='Фото склада', blank=True)
+
+    objects = StorageQuerySet.as_manager()
 
     def __str__(self):
         return f'{self.numer} {self.address}'
@@ -54,6 +69,7 @@ class Box(models.Model):
     width = models.FloatField(verbose_name='Ширина')
     height = models.FloatField(verbose_name='Высота')
     price = models.IntegerField(verbose_name='Цена')
+    is_occupied = models.BooleanField(verbose_name='Занят', default=False)
 
     def __str__(self):
         return f'{self.name}({self.length}x{self.width}x{self.height} м)'
