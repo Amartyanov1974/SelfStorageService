@@ -1,3 +1,4 @@
 django==4.0
 environs[django]==9.5
 gunicorn==21.1
+requests~=2.31.0
