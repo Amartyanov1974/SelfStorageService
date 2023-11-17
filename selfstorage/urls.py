@@ -17,7 +17,7 @@ from django.contrib import admin
 from django.urls import path
 from django.conf import settings
 from django.conf.urls.static import static
-from storage import views
+from storage import views, actions
 
 
 urlpatterns = [
@@ -26,5 +26,8 @@ urlpatterns = [
     path('faq', views.faq, name='faq'),
     path('boxes', views.boxes, name='boxes'),
     path('my_rent', views.my_rent, name='my_rent'),
-    path('deauth', views.deauth, name='deauth'),
+    path('deauth', actions.deauth, name='deauth'),
+    path('create_client', actions.create_client, name='create_client'),
+    path('send_check', actions.send_check, name='send_check'),
+    path('send_message', actions.send_message, name='send_message'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -1,4 +1,5 @@
 from django.contrib import admin
+from django.core.management import call_command
 
 from storage.models import Client, Box, Storage, Order
 
@@ -16,6 +17,7 @@ class ClientAdmin(admin.ModelAdmin):
     inlines = [
         OrderInline
     ]
+    change_list_template = "admin/client.html"
 
 class BoxInline(admin.TabularInline):
     model = Box
@@ -37,3 +39,4 @@ class BoxAdmin(admin.ModelAdmin):
 @admin.register(Order)
 class OrderAdmin(admin.ModelAdmin):
     list_display = ['pk', 'storage', 'box', 'client', 'price']
+    change_list_template = "admin/order.html"
