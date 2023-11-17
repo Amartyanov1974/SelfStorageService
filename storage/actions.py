@@ -1,3 +1,5 @@
+import string
+from random import choice
 from django.contrib.auth import login, logout, authenticate
 from django.shortcuts import render, redirect
 from django.core.mail import send_mail
@@ -93,3 +95,42 @@ def send_message(*args):
     Здесь будет код
     """
     return redirect('admin/storage/client')
+
+
+def sendpasswd(request):
+    """Генерация пароля и отправка по почте
+
+    Для работы функции отправки пароля по почте необходимо в .env
+    занести следующие параметры:
+    EMAIL_HOST
+    DEFAULT_FROM_EMAIL
+    EMAIL_PORT
+    EMAIL_HOST_USER
+    EMAIL_HOST_PASSWORD
+    EMAIL_USE_SSL
+    Подробности: https://djangodoc.ru/3.2/topics/email/
+    """
+    email=request.POST['EMAIL_FORGET']
+    try:
+        user = User.objects.get(email=email)
+    except:
+        request.session['message'] = 'Пользователь с такой почтой не зарегистрирован'
+        return 0
+    chars = f'{string.ascii_letters}{string.digits}'
+    new_passwd = ''.join([choice(chars) for i in range(7)])
+    try:
+        user.set_password(new_passwd)
+        user.save()
+        send_mail(
+            'Новый пароль от Foodplane',
+            f'Ваш новый пароль: {new_passwd}',
+            '',
+            [email,],
+            fail_silently=False,
+        )
+        request.session['message'] = 'Пароль выслан на вашу почту'
+        return 0
+    except:
+        request.session['message'] = 'Сбой отправки почты'
+        return 0
+    return 0

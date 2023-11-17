@@ -7,7 +7,7 @@ from django.http import HttpResponse
 from django.shortcuts import redirect, render
 from django.template import loader
 
-from storage.actions import auth, deauth, registration, send_message
+from storage.actions import auth, deauth, registration, send_message, sendpasswd
 from storage.models import Client
 
 
@@ -27,6 +27,9 @@ def index(request):
         auth(request)
         return redirect('/')
 
+    elif 'EMAIL_FORGET' in request.POST:
+        sendpasswd(request)
+        return redirect('/')
 
     elif 'user_name' in request.session:
         context = {

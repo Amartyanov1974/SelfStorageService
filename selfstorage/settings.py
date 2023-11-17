@@ -35,6 +35,12 @@ DEBUG = env.bool('DEBUG', False)
 
 ALLOWED_HOSTS = env.list('ALLOWED_HOSTS', ['127.0.0.1', 'localhost'])
 
+EMAIL_HOST=env.str('EMAIL_HOST', 'smtp.yandex.ru')
+DEFAULT_FROM_EMAIL=env.str('EMAIL_HOST_USER', 'user@yandex.ru')
+EMAIL_PORT=env.int('EMAIL_PORT', 465)
+EMAIL_HOST_USER=env.str('EMAIL_HOST_USER', 'user')
+EMAIL_HOST_PASSWORD=env.str('EMAIL_HOST_PASSWORD', 'passwd')
+EMAIL_USE_SSL=env.bool('EMAIL_USE_SSL', True)
 
 # Application definition
 
