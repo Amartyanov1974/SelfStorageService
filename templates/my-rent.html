@@ -3,6 +3,33 @@
 {% block main %}
 {% include "header.html" %}
 <main class="container mt-header">
+    <style>
+        /* Скрыть всплывающее окно по умолчанию */
+        #myModal {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            padding: 20px;
+            background-color: #fff;
+            border: 1px solid #ccc;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            z-index: 1;
+        }
+
+        /* Стили для затемнения заднего фона */
+        #overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 0;
+        }
+    </style>
     <div class="row" role="tablist">
         <div class="col-lg-3 d-flex flex-column nav nav-pills">
             <button class="ps-0 btn bg-white fs_24 shadow-none SelfStorage_orange SelfStorage_tab active" id="LK-tab" data-bs-toggle="pill" data-bs-target="#LK" type="button" role="tab" aria-controls="LK" aria-selected="true">Личный кабинет</button>
@@ -65,8 +92,38 @@
                         <h4 class="SelfStorage_green">Срок аренды</h4>
                         <h4>15.03.2022 - 28.06.2022</h4>
                         <div><button class="btn fs_24 px-5 py-3 text-white border-8 SelfStorage__bg_green SelfStorage__btn2_green mb-3">Продлить аренду</button></div>
-                        <div><button class="btn fs_24 px-5 py-3 text-white border-8 SelfStorage__bg_orange SelfStorage__btn2_orange mb-3">Открыть бокс</button></div>
+                        <div><button onclick="openModal()"class="btn fs_24 px-5 py-3 text-white border-8 SelfStorage__bg_orange SelfStorage__btn2_orange mb-3">Открыть бокс</button></div>
                         <a href="#" class="SelfStorage_orange">Нужна помощь?</a>
+                        <div id="myModal">
+                            <p>Это всплывающее окно!</p>
+                            <img src="" alt="QR Code"> <!-- Пустой тег img для загрузки QR-кода -->
+                            <button id="closeButton">Закрыть</button>
+                        </div>
+                        <div id="overlay" onclick="closeModal()"></div>
+                        
+                        <script>
+                            function openModal() {
+                                var xhr = new XMLHttpRequest();
+                                xhr.open("GET", "{% url 'generate_qr_code' %}", true);
+                                xhr.responseType = "blob";
+                        
+                                xhr.onload = function () {
+                                    if (xhr.status === 200) {
+                                        var imageUrl = URL.createObjectURL(xhr.response);
+                                        document.getElementById('myModal').innerHTML = '<img src="' + imageUrl + '" alt="QR Code">';
+                                        document.getElementById('myModal').style.display = 'block';
+                                        document.getElementById('overlay').style.display = 'block';
+                                        
+                                    }
+                                };
+                        
+                                xhr.send();
+                            }
+                            function closeModal() {
+                                document.getElementById('myModal').style.display = 'none';
+                                document.getElementById('overlay').style.display = 'none';
+                            }
+                        </script>
                     </div>
 
                     <div class="mb-5">
@@ -77,7 +134,7 @@
                         <h4 class="SelfStorage_green">Срок аренды</h4>
                         <h4>18.03.2022 - 21.09.2022</h4>
                         <div><button class="btn fs_24 px-5 py-3 text-white border-8 SelfStorage__bg_green SelfStorage__btn2_green mb-3">Продлить аренду</button></div>
-                        <div><button class="btn fs_24 px-5 py-3 text-white border-8 SelfStorage__bg_orange SelfStorage__btn2_orange mb-3">Открыть бокс</button></div>
+                        <div><button onclick="openModal()"class="btn fs_24 px-5 py-3 text-white border-8 SelfStorage__bg_orange SelfStorage__btn2_orange mb-3">Открыть бокс</button></div>
                         <a href="#" class="SelfStorage_orange">Нужна помощь?</a>
                     </div>
                 </div>
