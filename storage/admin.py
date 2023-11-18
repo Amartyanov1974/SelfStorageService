@@ -14,11 +14,12 @@ class OrderInline(admin.TabularInline):
 @admin.register(Client)
 class ClientAdmin(admin.ModelAdmin):
     list_display = ['user_name', 'user_email', 'address',
-                    'phonenumber']
+                    'phonenumber', 'need_call', 'need_invoice']
     readonly_fields = ['user']
     inlines = [
         OrderInline
     ]
+    list_filter = ["need_call", "need_invoice"]
     change_list_template = "admin/client.html"
 
 class BoxInline(admin.TabularInline):
