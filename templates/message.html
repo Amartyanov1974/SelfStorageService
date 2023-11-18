@@ -1,0 +1,11 @@
+{% load static %}
+{% if message %}
+  <dialog open="open" id="closeMe" aria-modal="true">
+    <h2 class="fw-bold mt-4 mb-3 SelfStorage__bg_black">{{message}}!</h2>
+    <form method="dialog">
+      <button class="btn border-8 py-3 px-5 w-100 text-white fs_24 SelfStorage__bg_orange SelfStorage__btn2_orange">
+        <center>Закрыть</center>
+      </button>
+    </form>
+  </dialog>
+{% endif %}
