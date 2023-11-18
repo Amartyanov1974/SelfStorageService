@@ -143,7 +143,7 @@ def box_select(request, storage_id):
 def create_order(request, box_id):
     context = {}
     if 'user_name' in request.session:
-        print('User:       ', request.session['user_name'])
+
         box = Box.objects.get(id=box_id)
         client = Client.objects.get(user=request.user)
         order = Order.objects.create(

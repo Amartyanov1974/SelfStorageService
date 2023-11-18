@@ -9,7 +9,7 @@ from django.db import transaction
 from django.conf import settings
 
 from storage.models import Client, Order
-# from storage.views import my_rent
+
 
 User._meta.get_field('email')._unique = True
 
@@ -87,15 +87,9 @@ def send_check(*args):
     """
     Здесь будет код
     """
-    return redirect('admin/storage/order')
-
-def create_client(*args):
-    """
-    Здесь будет код
-    """
     return redirect('admin/storage/client')
 
-def send_message(*args):
+def create_client(*args):
     """
     Здесь будет код
     """
