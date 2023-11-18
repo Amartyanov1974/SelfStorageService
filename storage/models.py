@@ -93,15 +93,18 @@ class Order(models.Model):
     created_at = models.DateTimeField(verbose_name='Создано',
                                       auto_now_add=True)
     box = models.ForeignKey(Box,
-                            on_delete=models.CASCADE,
+                            on_delete=models.SET_NULL,
                             related_name='orders',
                             verbose_name='Бокс',
                             null=True,
-                            blank=True)
+                            blank=True,
+                            default=None)
     paid_with = models.DateField(verbose_name="Оплачено c",
                                  null=True,
                                  blank=True)
-    price = models.IntegerField(verbose_name='Стоимость')
+    price = models.IntegerField(verbose_name='Стоимость',
+                                null=True,
+                                blank=True)
 
     size = models.CharField(max_length=50,
                             verbose_name='Размер',
@@ -110,7 +113,11 @@ class Order(models.Model):
 
     @property
     def storage(self):
-        return self.box.storage
+        try:
+            storage = self.box.storage
+        except:
+            storage = None
+        return storage
 
     def __str__(self):
         return f'#{self.pk} {self.client} {self.storage} {self.box}'
