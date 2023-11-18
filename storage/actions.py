@@ -89,12 +89,6 @@ def send_check(*args):
     """
     return redirect('admin/storage/client')
 
-def create_client(*args):
-    """
-    Здесь будет код
-    """
-    return redirect('admin/storage/client')
-
 
 def create_empty_order(request):
     first_name = request.POST['BID_NAME']
@@ -121,6 +115,28 @@ def create_empty_order(request):
         return 0
     request.session['message'] =  'Ваша заявка отправлена, с Вами свяжутся'
     return 0
+
+
+def create_client(request):
+    first_name = request.POST['NAME_CREATE']
+    username = request.POST['EMAIL_CREATE']
+    email = request.POST['EMAIL_CREATE']
+    try:
+        chars = f'{string.ascii_letters}{string.digits}'
+        password = ''.join([choice(chars) for i in range(7)])
+
+        user = User.objects.create_user(
+            first_name=first_name,
+            username=username,
+            password=password,
+            email=email,
+        )
+        client = Client.objects.create(
+            user=user,
+        )
+    except:
+        return redirect('admin/storage/client')
+    return redirect('admin/storage/client')
 
 
 def sendpasswd(request):
