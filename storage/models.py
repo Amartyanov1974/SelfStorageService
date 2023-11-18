@@ -110,6 +110,8 @@ class Order(models.Model):
                             verbose_name='Размер',
                             null=True,
                             blank=True)
+    paid = models.BooleanField(verbose_name='Оплачен',
+                                    default=False)
 
     @property
     def storage(self):

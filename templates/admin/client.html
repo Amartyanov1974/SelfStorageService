@@ -11,7 +11,7 @@
         </form>
       </div>
       <div style="margin: 5px 5px 5px 5px;  display: block">
-        <form action="{% url 'send_message' %}" method="POST">
+        <form action="{% url 'send_check' %}" method="POST">
           {% csrf_token %}
           <input type="submit" value="Отправить счет" />
         </form>

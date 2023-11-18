@@ -72,7 +72,6 @@ def registration(request):
 
 def deauth(request):
     logout(request)
-    #request.session.clear()
     request.session.pop('user_name', None)
     return redirect('/')
 
@@ -83,10 +82,25 @@ def send_message(*args):
     """
     return redirect('admin/storage/order')
 
-def send_check(*args):
-    """
-    Здесь будет код
-    """
+def send_check(request):
+    orders = Order.objects.filter(paid=False)
+    for order in orders:
+        email = order.client.user_email
+        box = order.box
+        storage = order.box.storage
+        price = order.box.price
+        name = order.client.user.first_name
+        try:
+            send_mail(
+                'Счет от SelfService',
+                f'Уважаемый {name}, \nЗа бокс: {box} на складе: {storage} \n оплатите за месяц {price} рублей. Платежные данные следующие: (здесь данные)',
+                '',
+                [email,],
+                fail_silently=False,
+            )
+            Client.objects.filter(orders=order).update(need_invoice=False)
+        except:
+            return redirect('admin/storage/client')
     return redirect('admin/storage/client')
 
 
