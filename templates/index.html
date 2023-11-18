@@ -25,7 +25,7 @@
                     <input type="name" required name="EMAIL2" class="form-control border-8 mb-4 me-3 py-3 px-5 border-0 fs_24 SelfStorage__bg_lightgrey" placeholder="Укажите Ваше имя">
                 {% endif %}
                 <input type="text" required name="EMAIL2" class="form-control border-8 mb-4 me-3 py-3 px-5 border-0 fs_24 SelfStorage__bg_lightgrey" placeholder="Габариты (через пробел): длина ширина высота">
-                <button class="btn border-8 py-3 px-5 w-100 text-white fs_24 SelfStorage__bg_orange SelfStorage__btn2_orange">Рассчитать стоимость</button>
+                <a href="{% url 'storages:index' %}" class="btn border-8 py-3 px-5 w-100 text-white fs_24 SelfStorage__bg_orange SelfStorage__btn2_orange">Рассчитать стоимость</a>
                 <span class="text-center fw-light">Нажимая на кнопку, вы подтверждаете свое <a href="#" class="link-dark">согласие на обработку персональных данных</a></span>
             </form>
         </div>
@@ -132,30 +132,35 @@
     </article>
 
     <article class="row pt-header">
-        <div class="col-12 col-lg-6 mb-3 mb-lg-0 SelfStorage__img2"></div>
-        <div class="col-12 col-lg-6 d-flex flex-column align-items-center align-items-lg-start">
-            <h1 class="text-start fw-bold SelfStorage_green mb-4">Всегда рядом</h1>
-            <h4 class="SelfStorage_grey">Одинцово,  ул. Северная, д. 36</h4>
-            <div class="row">
-                <div class="col-6 d-flex flex-column align-items-center align-items-lg-start">
-                    <span class="fs_30 fw-bold SelfStorage_orange">18 °С</span>
-                    <span class="SelfStorage_grey mb-3">Температура на складе</span>
-                    <span class="fs_30 fw-bold SelfStorage_orange">24 из 258</span>
-                    <span class="SelfStorage_grey mb-3">Боксов свободно</span>
-                </div>
-                <div class="col-6 d-flex flex-column align-items-center align-items-lg-start">
-                    <span class="fs_30 fw-bold SelfStorage_orange">до 3.5 м</span>
-                    <span class="SelfStorage_grey mb-3">Высота потолка</span>
-                    <span class="fs_30 fw-bold SelfStorage_orange">2264 ₽</span>
-                    <span class="SelfStorage_grey mb-3">Оплата за месяц</span>
-                </div>
-                <a href="#" class="text-center text-lg-start mt-4 mb-5 SelfStorage_green">Подробнее о складе</a>
-                <div class="d-flex flex-column align-items-center align-items-lg-start">
-                    <button class="btn w-75 fs_24 px-5 py-3 text-white border-8 SelfStorage__bg_green SelfStorage__btn2_green mb-3">Арендовать бокс</button>
-                    <button class="btn w-75 fs_24 px-5 py-3 text-white border-8 SelfStorage__bg_orange SelfStorage__btn2_orange">Выбрать склад</button>
-                </div>
-            </div>
-        </div>
+        <h1 class="text-center fw-bold SelfStorage_green mb-5">Выбор склада</h1>
+        <h6 class="text-center SelfStorage_grey">Арендуйте склад индивидуального хранения по уникальной цене прямо
+            сейчас
+        </h6>
+        <ul class="nav nav-pills mb-3 d-flex justify-content-between" id="boxes-links" role="tablist">
+            {% for storage in storages %}
+                <li class="nav-item flex-grow-1 mx-2" role="presentation">
+                    <a href="{% url 'storages:box_select' storage.id %}" class="row text-decoration-none py-3 px-4 mt-5 SelfStorage__boxlink"
+                       id="pills-Moscow-tab" data-bs-target="#pills-Moscow" role="tab"
+                       aria-controls="pills-Moscow" aria-selected="true">
+                        <div class="col-12 col-lg-3 d-flex justify-content-center">
+                            <img src="{{ storage.image.url }}" alt="" class="mb-3 mb-lg-0">
+                        </div>
+                        <div class="col-12 col-md-4 col-lg-3 d-flex flex-column justify-content-center">
+                            <h4 class="text-center">{{ storage.city }}</h4>
+                            <h6 class="text-center">{{ storage.address }}</h6>
+                        </div>
+                        <div class="col-12 col-md-4 col-lg-3 d-flex flex-column justify-content-center">
+                            <h4 class="text-center">{{ storage.count_of_free_boxes }} из {{ storage.count_boxes }}</h4>
+                            <h6 class="text-center">Боксов свободно</h6>
+                        </div>
+                        <div class="col-12 col-md-4 col-lg-3 d-flex flex-column justify-content-center">
+                            <h4 class="text-center SelfStorage_green">от {{ storage.min_price }} ₽</h4>
+                            <h6 class="text-center">{{ storage.feature }}</h6>
+                        </div>
+                    </a>
+                </li>
+            {% endfor %}
+        </ul>
     </article>
     <article class="row pt-header">
         <h1 class="text-center fw-bold SelfStorage_green mb-4">Забота о ваших ценностях – наша главная задача</h1>

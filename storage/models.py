@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
-from django.db.models import Min
+from django.db.models import Min, Max
 
 
 class Client(models.Model):
@@ -44,6 +44,8 @@ class StorageQuerySet(models.QuerySet):
             storage.count_boxes = storage.boxes.count()
             min_price = storage.boxes.aggregate(Min('price'))
             storage.min_price = min_price['price__min']
+            max_height = storage.boxes.aggregate(Max('height'))
+            storage.max_height = max_height['height__max']
         return self
 
 
