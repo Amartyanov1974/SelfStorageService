@@ -118,6 +118,10 @@ def storages(request):
             'username': request.session['user_name'],
             'storages': Storage.objects.get_boxes(),
         }
+    else:
+        context = {
+            'storages': Storage.objects.get_boxes(),
+        }
     return render(request, 'storages.html', context=context)
 
 
@@ -127,6 +131,10 @@ def box_select(request, storage_id):
     if 'user_name' in request.session:
         context = {
             'username': request.session['user_name'],
+            'boxes': boxes,
+        }
+    else:
+        context = {
             'boxes': boxes,
         }
     return render(request, 'box-select.html', context=context)
@@ -145,4 +153,5 @@ def create_order(request, box_id):
             'username': request.session['user_name'],
             'order': order,
         }
+
     return render(request, 'order_confirmation.html', context)
