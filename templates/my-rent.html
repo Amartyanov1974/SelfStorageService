@@ -117,8 +117,13 @@
                         <h4 class="SelfStorage_green">Мой бокс</h4>
                         <h4>№ {{order.box.name}}</h4>
                         <h4 class="SelfStorage_green">Срок аренды</h4>
-                        <h4>{{order.paid_with}} - </h4>
-                        <div><a href="need_invoice" role="button"  class="btn fs_24 px-5 py-3 text-white border-8 SelfStorage__bg_green SelfStorage__btn2_green mb-3">Продлить аренду</a></div>
+                        {% if order.paid_with %}
+                          <h4>{{order.paid_with}} - </h4>
+                          <div><a href="need_invoice" role="button"  class="btn fs_24 px-5 py-3 text-white border-8 SelfStorage__bg_green SelfStorage__btn2_green mb-3">Продлить аренду</a></div>
+                        {% else %}
+                          <h4> Не оплачено </h4>
+                          <div><a href="need_invoice" role="button"  class="btn fs_24 px-5 py-3 text-white border-8 SelfStorage__bg_green SelfStorage__btn2_green mb-3">Оплатить аренду</a></div>
+                        {% endif %}
                         <div><button onclick="openModal()"class="btn fs_24 px-5 py-3 text-white border-8 SelfStorage__bg_orange SelfStorage__btn2_orange mb-3">Открыть бокс</button></div>
                         <a href="#" class="SelfStorage_orange">Нужна помощь?</a>
                       </div>
