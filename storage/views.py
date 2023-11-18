@@ -1,4 +1,5 @@
 import datetime
+import random
 
 import qrcode
 from django.conf import settings
@@ -18,6 +19,7 @@ User._meta.get_field('email')._unique = True
 
 def index(request):
     context = {}
+
     if 'message' in request.session and request.session['message']:
         context = {
             'message': request.session.get('message'),
@@ -40,7 +42,7 @@ def index(request):
         context = {
             'username': request.session['user_name'],
         }
-
+    context['storages'] = Storage.objects.get_boxes()
     return render(request, 'index.html', context=context)
 
 
@@ -59,6 +61,8 @@ def boxes(request):
         context = {
             'username': request.session['user_name'],
         }
+    context['storages'] = Storage.objects.get_boxes()
+    context['random_storage'] = random.choice(Storage.objects.get_boxes())
     return render(request, 'boxes.html', context=context)
 
 
