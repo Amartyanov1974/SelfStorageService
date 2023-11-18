@@ -8,6 +8,7 @@ from django.db import transaction
 from django.conf import settings
 
 from storage.models import Client
+# from storage.views import my_rent
 
 User._meta.get_field('email')._unique = True
 
@@ -145,3 +146,16 @@ def update_client(request):
         user=request.user,
         defaults={'address': address, 'phonenumber': phonenumber})
     return 0
+
+
+def need_call(request):
+    Client.objects.filter(user=request.user).update(need_call=True)
+
+    request.session['message'] =  'В ближайшее врямя Вам перезвонят'
+    return redirect('my_rent')
+
+def need_invoice(request):
+    Client.objects.filter(user=request.user).update(need_invoice=True)
+
+    request.session['message'] =  'В ближайшее врямя Вам вышлют счет на E-mail'
+    return redirect('my_rent')

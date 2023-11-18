@@ -83,6 +83,11 @@ def generate_qr_code(request):
 
 def my_rent(request):
     context = {}
+    message = ''
+    if 'message' in request.session and request.session['message']:
+        message = request.session.get('message')
+
+        request.session['message'] = ''
     if 'PHONE_EDIT' in request.POST:
         update_client(request)
     if 'user_name' in request.session:
@@ -92,6 +97,7 @@ def my_rent(request):
             'username': request.session['user_name'],
             'client': client,
             'orders': orders,
+            'message': message,
         }
     return render(request, 'my-rent.html', context=context)
 

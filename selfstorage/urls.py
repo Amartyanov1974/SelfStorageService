@@ -32,4 +32,6 @@ urlpatterns = [
                   path('send_check', actions.send_check, name='send_check'),
                   path('send_message', actions.send_message, name='send_message'),
                   path('storages/', include('storage.urls', namespace='storages')),
+                  path('need_call', actions.need_call, name='need_call'),
+                  path('need_invoice', actions.need_invoice, name='need_invoice'),
               ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
