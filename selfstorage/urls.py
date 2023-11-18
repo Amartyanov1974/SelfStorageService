@@ -31,5 +31,5 @@ urlpatterns = [
                   path('create_client', actions.create_client, name='create_client'),
                   path('send_check', actions.send_check, name='send_check'),
                   path('send_message', actions.send_message, name='send_message'),
-                  path('calculate_cost', views.calculate_cost, name='calculate_cost'),
+                  path('storages/', include('storage.urls', namespace='storages')),
               ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

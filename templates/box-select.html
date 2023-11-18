@@ -1,0 +1,97 @@
+{% extends "master.html" %}
+{% load static %}
+{% block main %}
+{% include "aside.html" %}
+<header class="navbar navbar-expand-xl navbar-light fixed-top bg-white py-5">
+    <nav class="container">
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <a class="navbar-brand" href="/">
+            <img src="{% static 'img/Vector.svg' %}" alt="[]">
+            <img src="{% static 'img/SelfStorage.svg' %}" alt="SelfStorage">
+        </a>
+        <div class="collapse navbar-collapse justify-content-end" id="navbar">
+            <ul class="navbar-nav">
+                <li class="nav-item me-5">
+                    <a class="nav-link SelfStorage_black" href="{% url 'index' %}">Рассчитать стоимость</a>
+                </li>
+                <li class="nav-item me-5">
+                    <a class="nav-link SelfStorage_black" href="{% url 'faq' %}">Правила хранения</a>
+                </li>
+                <li class="nav-item me-5">
+                    <a class="nav-link SelfStorage_black" href="{% url 'boxes' %}">Арендовать бокс</a>
+                </li>
+                <li class="nav-item me-5">
+                {% if username %}
+                    <a class="nav-link SelfStorage_green" href="{% url 'my_rent' %}" >Личный кабинет: {{username}}</a>
+                <li class="nav-item me-5">
+                    <a class="nav-link SelfStorage_green" href="{% url 'deauth' %}" >Выйти</a>
+                </li>
+                    {% else %}
+                    <a class="nav-link SelfStorage_green" href="#" data-bs-toggle="modal" data-bs-target="#SignModal">Войти</a>
+                {% endif %}
+                </li>
+                <li class="nav-item d-flex align-items-center">
+                    <div class="d-flex justify-content-center align-items-center rounded-pill SelfStorage__bg_green me-2" style="height: 36px; width: 36px;">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" fill="white" class="bi bi-telephone-fill" viewBox="0 0 16 16">
+                            <path fill-rule="evenodd" d="M1.885.511a1.745 1.745 0 0 1 2.61.163L6.29 2.98c.329.423.445.974.315 1.494l-.547 2.19a.678.678 0 0 0 .178.643l2.457 2.457a.678.678 0 0 0 .644.178l2.189-.547a1.745 1.745 0 0 1 1.494.315l2.306 1.794c.829.645.905 1.87.163 2.611l-1.034 1.034c-.74.74-1.846 1.065-2.877.702a18.634 18.634 0 0 1-7.01-4.42 18.634 18.634 0 0 1-4.42-7.009c-.362-1.03-.037-2.137.703-2.877L1.885.511z"/>
+                        </svg>
+                    </div>
+                    <b>8 (800) 000-00-00</b>
+                </li>
+            </ul>
+        </div>
+    </nav>
+</header>
+<main class="container mt-header">
+    <article class="row">
+        <h1 class="text-center fw-bold SelfStorage_green mb-5">Выбор склада</h1>
+        <h6 class="text-center SelfStorage_grey">Арендуйте склад индивидуального хранения по уникальной цене прямо
+            сейчас</h6>
+        <ul class="nav nav-pills mb-3 d-flex justify-content-between" id="boxes-links" role="tablist">
+            {% for box in boxes %}
+            <li class="nav-item flex-grow-1 mx-2" role="presentation">
+                <a href="{% url 'storages:order_confirmation' box.id %}" class="row text-decoration-none py-3 px-4 mt-5 SelfStorage__boxlink"
+                   id="pills-Moscow-tab" data-bs-target="#pills-Moscow" role="tab"
+                   aria-controls="pills-Moscow" aria-selected="true">
+                    <div class="col-12 col-lg-3 d-flex justify-content-center">
+                        <img src="{% static 'img/image9.png' %}" alt="" class="mb-3 mb-lg-0">
+                    </div>
+                    <div class="col-12 col-md-4 col-lg-3 d-flex flex-column justify-content-center">
+                        <h4 class="text-center">Размеры бокса</h4>
+                        <h6 class="text-center">{{ box.length }}х{{ box.width }}х{{ box.height }}</h6>
+                    </div>
+                    <div class="col-12 col-md-4 col-lg-3 d-flex flex-column justify-content-center">
+                        <h4 class="text-center">Номер бокса</h4>
+                        <h6 class="text-center">№{{ box.name }}</h6>
+                    </div>
+                    <div class="col-12 col-md-4 col-lg-3 d-flex flex-column justify-content-center">
+                        <h4 class="text-center SelfStorage_green">{{ box.price }} рублей</h4>
+                        <h6 class="text-center">Цена бокса</h6>
+                    </div>
+                </a>
+            </li>
+            {% endfor %}
+
+        </ul>
+        <script>
+            document.getElementById('pills-Moscow-tab').addEventListener('click', () => {
+                document.getElementById('toBox').click()
+            })
+            document.getElementById('pills-Odintsovo-tab').addEventListener('click', () => {
+                document.getElementById('toBox').click()
+            })
+            document.getElementById('pills-Pushkino-tab').addEventListener('click', () => {
+                document.getElementById('toBox').click()
+            })
+            document.getElementById('pills-Lubertsi-tab').addEventListener('click', () => {
+                document.getElementById('toBox').click()
+            })
+            document.getElementById('pills-Domodedovo-tab').addEventListener('click', () => {
+                document.getElementById('toBox').click()
+            })
+        </script>
+    </article>
+</main>
+{% endblock %}

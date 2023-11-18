@@ -1,3 +1,5 @@
+import datetime
+
 import qrcode
 from django.conf import settings
 from django.contrib.auth import authenticate, login, logout
@@ -9,7 +11,7 @@ from django.template import loader
 
 from storage.actions import (
     auth, deauth, registration, send_message, sendpasswd, update_client)
-from storage.models import Client, Storage
+from storage.models import Client, Storage, Box, Order
 
 User._meta.get_field('email')._unique = True
 
@@ -90,12 +92,41 @@ def my_rent(request):
             'username': request.session['user_name'],
             'client': client,
             'orders': orders,
-            }
+        }
     return render(request, 'my-rent.html', context=context)
 
 
-def calculate_cost(request):
-    context = {
-        'storages': Storage.objects.get_boxes()
-    }
-    return render(request, 'calculate-cost.html', context=context)
+def storages(request):
+    context = {}
+    if 'user_name' in request.session:
+        context = {
+            'username': request.session['user_name'],
+            'storages': Storage.objects.get_boxes(),
+        }
+    return render(request, 'storages.html', context=context)
+
+
+def box_select(request, storage_id):
+    context = {}
+    boxes = Box.objects.filter(storage=storage_id, is_occupied=False).order_by('price')
+    if 'user_name' in request.session:
+        context = {
+            'username': request.session['user_name'],
+            'boxes': boxes,
+        }
+    return render(request, 'box-select.html', context=context)
+
+
+def create_order(request, box_id):
+    context = {}
+    if 'user_name' in request.session:
+        box = Box.objects.get(id=box_id)
+        client = Client.objects.get(user__first_name=request.session['user_name'])
+        order = Order.objects.create(
+            client=client, created_at=datetime.datetime.now(), box=box, price=box.price
+        )
+        context = {
+            'username': request.session['user_name'],
+            'order': order,
+        }
+    return render(request, 'order_confirmation.html', context)

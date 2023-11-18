@@ -15,7 +15,7 @@
                     <input type="name" required name="EMAIL2" class="form-control border-8 mb-4 me-3 py-3 px-5 border-0 fs_24 SelfStorage__bg_lightgrey" placeholder="Укажите Ваше имя">
                 {% endif %}
                 <input type="text" required name="EMAIL2" class="form-control border-8 mb-4 me-3 py-3 px-5 border-0 fs_24 SelfStorage__bg_lightgrey" placeholder="Габариты (через пробел): длина ширина высота">
-                <a href="calculate_cost" class="btn border-8 py-3 px-5 w-100 text-white fs_24 SelfStorage__bg_orange SelfStorage__btn2_orange">Рассчитать стоимость</a>
+                <a href="{% url 'storages:index' %}" class="btn border-8 py-3 px-5 w-100 text-white fs_24 SelfStorage__bg_orange SelfStorage__btn2_orange">Рассчитать стоимость</a>
                 <span class="text-center fw-light">Нажимая на кнопку, вы подтверждаете свое <a href="#" class="link-dark">согласие на обработку персональных данных</a></span>
             </form>
         </div>

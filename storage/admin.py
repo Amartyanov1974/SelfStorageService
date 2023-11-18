@@ -6,6 +6,7 @@ from storage.models import Client, Box, Storage, Order
 
 User._meta.get_field('email')._unique = True
 
+
 class OrderInline(admin.TabularInline):
     model = Order
     extra = 0
@@ -22,9 +23,11 @@ class ClientAdmin(admin.ModelAdmin):
     list_filter = ["need_call", "need_invoice"]
     change_list_template = "admin/client.html"
 
+
 class BoxInline(admin.TabularInline):
     model = Box
     extra = 0
+
 
 @admin.register(Storage)
 class StorageAdmin(admin.ModelAdmin):
@@ -32,6 +35,7 @@ class StorageAdmin(admin.ModelAdmin):
     inlines = [
         BoxInline
     ]
+
 
 @admin.register(Box)
 class BoxAdmin(admin.ModelAdmin):
