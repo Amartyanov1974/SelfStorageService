@@ -11,7 +11,8 @@ from django.shortcuts import redirect, render
 from django.template import loader
 
 from storage.actions import (
-    auth, deauth, registration, send_message, sendpasswd, update_client)
+    auth, deauth, registration, send_message, sendpasswd,
+    update_client, create_empty_order)
 from storage.models import Client, Storage, Box, Order
 
 User._meta.get_field('email')._unique = True
@@ -36,6 +37,9 @@ def index(request):
 
     elif 'EMAIL_FORGET' in request.POST:
         sendpasswd(request)
+        return redirect('/')
+    elif 'BID_EMAIL' in request.POST:
+        create_empty_order(request)
         return redirect('/')
 
     elif 'user_name' in request.session:
@@ -103,6 +107,7 @@ def my_rent(request):
             'orders': orders,
             'message': message,
         }
+
     return render(request, 'my-rent.html', context=context)
 
 
@@ -130,8 +135,9 @@ def box_select(request, storage_id):
 def create_order(request, box_id):
     context = {}
     if 'user_name' in request.session:
+        print('User:       ', request.session['user_name'])
         box = Box.objects.get(id=box_id)
-        client = Client.objects.get(user__first_name=request.session['user_name'])
+        client = Client.objects.get(user=request.user)
         order = Order.objects.create(
             client=client, created_at=datetime.datetime.now(), box=box, price=box.price
         )

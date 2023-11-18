@@ -1,4 +1,5 @@
 import string
+import random
 from random import choice
 from django.contrib.auth import login, logout, authenticate
 from django.shortcuts import render, redirect
@@ -7,7 +8,7 @@ from django.contrib.auth.models import User
 from django.db import transaction
 from django.conf import settings
 
-from storage.models import Client
+from storage.models import Client, Order
 # from storage.views import my_rent
 
 User._meta.get_field('email')._unique = True
@@ -71,7 +72,8 @@ def registration(request):
 
 def deauth(request):
     logout(request)
-    request.session['user_name'] = ''
+    #request.session.clear()
+    request.session.pop('user_name', None)
     return redirect('/')
 
 
@@ -100,6 +102,33 @@ def send_message(*args):
     return redirect('admin/storage/client')
 
 
+def create_empty_order(request):
+    first_name = request.POST['BID_NAME']
+    username = request.POST['BID_EMAIL']
+    email = request.POST['BID_EMAIL']
+    sizes = request.POST['BID_SIZES']
+    try:
+        chars = f'{string.ascii_letters}{string.digits}'
+        password = ''.join([choice(chars) for i in range(7)])
+
+        user = User.objects.create_user(
+            first_name=first_name,
+            username=username,
+            password=password,
+            email=email,
+        )
+        client = Client.objects.create(
+            user=user,
+        )
+        order =Order.objects.create(client=client,
+                                    size=sizes)
+    except:
+        request.session['message'] =  'Пользователь с такой почтой существует, авторизуйтесь'
+        return 0
+    request.session['message'] =  'Ваша заявка отправлена, с Вами свяжутся'
+    return 0
+
+
 def sendpasswd(request):
     """Генерация пароля и отправка по почте
 
@@ -125,7 +154,7 @@ def sendpasswd(request):
         user.set_password(new_passwd)
         user.save()
         send_mail(
-            'Новый пароль от Foodplane',
+            'Новый пароль от SelfService',
             f'Ваш новый пароль: {new_passwd}',
             '',
             [email,],
@@ -150,12 +179,11 @@ def update_client(request):
 
 def need_call(request):
     Client.objects.filter(user=request.user).update(need_call=True)
-
     request.session['message'] =  'В ближайшее врямя Вам перезвонят'
     return redirect('my_rent')
 
+
 def need_invoice(request):
     Client.objects.filter(user=request.user).update(need_invoice=True)
-
     request.session['message'] =  'В ближайшее врямя Вам вышлют счет на E-mail'
     return redirect('my_rent')

@@ -9,15 +9,17 @@
         <div class="col-12 col-lg-6 mb-3 mb-lg-0">
             <h1 class="fw-bold SelfStorage_green mb-5">Доставка и бережное хранение ваших вещей</h1>
             <h4 class="fw-lighter SelfStorage_grey mb-5">Аренда бокса на любой срок Бесплатная доставка от вашего дома </h4>
-            <form class="">
+            <form method="POST" action="/" >
               {% csrf_token %}
                 {% if not username %}
-                    <input type="text" required name="EMAIL1" class="form-control border-8 mb-4 py-3 px-5 border-0 fs_24 SelfStorage__bg_lightgrey" placeholder="Укажите ваш e-mail">
-                    <input type="name" required name="EMAIL2" class="form-control border-8 mb-4 me-3 py-3 px-5 border-0 fs_24 SelfStorage__bg_lightgrey" placeholder="Укажите Ваше имя">
+                  <input type="text" required name="BID_EMAIL" class="form-control border-8 mb-4 py-3 px-5 border-0 fs_24 SelfStorage__bg_lightgrey" placeholder="Укажите ваш e-mail">
+                  <input type="name" required name="BID_NAME" class="form-control border-8 mb-4 me-3 py-3 px-5 border-0 fs_24 SelfStorage__bg_lightgrey" placeholder="Укажите Ваше имя">
+                  <input type="text" required name="BID_SIZES" class="form-control border-8 mb-4 me-3 py-3 px-5 border-0 fs_24 SelfStorage__bg_lightgrey" placeholder="Укажите габариты">
+                  <button type="submit" class="btn border-8 py-3 px-5 w-100 text-white fs_24 SelfStorage__bg_orange SelfStorage__btn2_orange">Оставить заявку</button>
+                  <span class="text-center fw-light">Нажимая на кнопку, вы подтверждаете свое <a href="#" class="link-dark">согласие на обработку персональных данных</a></span>
                 {% endif %}
-                <input type="text" required name="EMAIL2" class="form-control border-8 mb-4 me-3 py-3 px-5 border-0 fs_24 SelfStorage__bg_lightgrey" placeholder="Габариты (через пробел): длина ширина высота">
-                <a href="{% url 'storages:index' %}" class="btn border-8 py-3 px-5 w-100 text-white fs_24 SelfStorage__bg_orange SelfStorage__btn2_orange">Рассчитать стоимость</a>
-                <span class="text-center fw-light">Нажимая на кнопку, вы подтверждаете свое <a href="#" class="link-dark">согласие на обработку персональных данных</a></span>
+                <a href="{% url 'storages:index' %}" class="btn border-8 py-3 px-5 w-100 text-white fs_24 SelfStorage__bg_orange SelfStorage__btn2_orange">Расчитать стоимость</a>
+
             </form>
         </div>
         <div class="col-12 col-lg-6 SelfStorage__img"></div>
@@ -210,31 +212,33 @@
         </div>
     </article>
 </main>
+{% if not username %}
 <aside class="py-5 mt-header SelfStorage__bg_green">
     <div class="container py-5Арендовать бокс">
         <div class="d-flex flex-column align-items-center">
-            <h1 class="text-white text-center fw-bold mb-4">Арендуйте свой первый бокс прямо сейчас и получите скидку 15% до конца апреля</h1>
+            <h1 class="text-white text-center fw-bold mb-4">Арендуйте свой первый бокс прямо сейчас и получите скидку 15% до конца ноября</h1>
             <h4 class="text-white text-center fw-light">Акция распространяется только на новых пользователей сервиса SelfStorage</h4>
-            <form class="row my-4">
+            <form class="row my-4"  method="POST" action="/">
               {% csrf_token %}
-                {% if not username %}
+
                 <div class="col-12 col-lg-6">
-                    <input type="name" required name="EMAIL2" class="form-control border-8 mb-4 me-3 py-3 px-5 border-0 fs_24 SelfStorage__bg_lightgrey" placeholder="Укажите Ваше имя">
+                    <input type="name" required name="BID_NAME" class="form-control border-8 mb-4 me-3 py-3 px-5 border-0 fs_24 SelfStorage__bg_lightgrey" placeholder="Укажите Ваше имя">
                 </div>
                 <div class="col-12 col-lg-6">
-                    <input type="email" required name="EMAIL2" class="form-control border-8 mb-4 me-3 py-3 px-5 border-0 fs_24 SelfStorage__bg_lightgrey" placeholder="Укажите Ваш e-mail">
-                </div>
-                {% endif %}
-                <div class="col-12 col-lg-6">
-                    <input type="text" required name="EMAIL2" class="form-control border-8 mb-4 me-3 py-3 px-5 border-0 fs_24 SelfStorage__bg_lightgrey" placeholder="Габариты (через пробел)">
+                    <input type="email" required name="BID_EMAIL" class="form-control border-8 mb-4 me-3 py-3 px-5 border-0 fs_24 SelfStorage__bg_lightgrey" placeholder="Укажите Ваш e-mail">
                 </div>
 
                 <div class="col-12 col-lg-6">
-                    <button class="btn w-100 border-8 py-3 px-5 text-white fs_24 SelfStorage__bg_orange SelfStorage__btn2_orange">Рассчитать стоимость</button>
+                    <input type="text" required name="BID_SIZES" class="form-control border-8 mb-4 me-3 py-3 px-5 border-0 fs_24 SelfStorage__bg_lightgrey" placeholder="Укажите габариты">
+                </div>
+
+                <div class="col-12 col-lg-6">
+                    <button class="btn w-100 border-8 py-3 px-5 text-white fs_24 SelfStorage__bg_orange SelfStorage__btn2_orange">Оставить заявку</button>
                 </div>
             </form>
             <span class="text-white text-center fw-light">Нажимая на кнопку, вы подтверждаете свое <a href="#" class="text-white">согласие на обработку персональных данных</a></span>
         </div>
     </div>
 </aside>
+{% endif %}
 {% endblock %}
