@@ -16,6 +16,10 @@ class Client(models.Model):
                                    max_length=50,
                                    null=True,
                                    blank=True)
+    need_call = models.BooleanField(verbose_name='Нужно перезвонить',
+                                    default=False)
+    need_invoice = models.BooleanField(verbose_name='Нужен счет',
+                                    default=False)
 
     @property
     def user_email(self):
