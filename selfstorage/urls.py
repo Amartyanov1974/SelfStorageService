@@ -16,9 +16,9 @@ Including another URLconf
 from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
-from django.urls import include, path
+from django.urls import path, include
 
-from storage import actions, bitly, views
+from storage import actions, views
 
 urlpatterns = [
                   path('admin/', admin.site.urls),
@@ -31,7 +31,6 @@ urlpatterns = [
                   path('create_client', actions.create_client, name='create_client'),
                   path('send_check', actions.send_check, name='send_check'),
                   path('send_message', actions.send_message, name='send_message'),
-                  path('<path:short_link>', bitly.handle_short_link, name='handle_short_link'),
                   path('storages/', include('storage.urls', namespace='storages')),
                   path('need_call', actions.need_call, name='need_call'),
                   path('need_invoice', actions.need_invoice, name='need_invoice'),
