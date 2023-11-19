@@ -123,10 +123,13 @@ class Order(models.Model):
 
     @property
     def days_left(self):
-        delta = self.end_date - datetime.now().date()
-        days = delta.days
-        if days < 5:
-            self.send_message = True
+        if self.end_date:
+            delta = self.end_date - datetime.now().date()
+            days = delta.days
+            if days < 5:
+                self.send_message = True
+        else:
+            days = None
         return days
 
     @property
