@@ -149,6 +149,7 @@ def create_order(request, box_id):
         order = Order.objects.create(
             client=client, created_at=datetime.datetime.now(), box=box, price=box.price
         )
+        Client.objects.filter(user=request.user).update(need_invoice=True)
         context = {
             'username': request.session['user_name'],
             'order': order,
