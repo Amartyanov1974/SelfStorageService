@@ -99,7 +99,10 @@ class Order(models.Model):
                             null=True,
                             blank=True,
                             default=None)
-    paid_with = models.DateField(verbose_name="Оплачено c",
+    start_date = models.DateField(verbose_name="Начало хранения",
+                                 null=True,
+                                 blank=True)
+    end_date = models.DateField(verbose_name="Окончание хранения",
                                  null=True,
                                  blank=True)
     price = models.IntegerField(verbose_name='Стоимость',
