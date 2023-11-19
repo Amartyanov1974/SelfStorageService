@@ -76,10 +76,26 @@ def deauth(request):
     return redirect('/')
 
 
-def send_message(*args):
-    """
-    Здесь будет код
-    """
+def send_message(request):
+    orders = Order.objects.filter(send_message=True)
+    print(orders)
+    for order in orders:
+        email = order.client.user_email
+        box = order.box
+        storage = order.box.storage
+        price = order.box.price
+        name = order.client.user.first_name
+        try:
+            send_mail(
+                'Напоминание от SelfService',
+                f'Уважаемый {name}, \nВаша аренда бокса: {box} на складе: {storage} \n заканчивается {order.end_date}',
+                '',
+                [email,],
+                fail_silently=False,
+            )
+            Order.objects.filter(id=order.pk).update(send_message=False)
+        except:
+            return redirect('admin/storage/order')
     return redirect('admin/storage/order')
 
 def send_check(request):

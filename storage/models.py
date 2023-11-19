@@ -128,6 +128,7 @@ class Order(models.Model):
             days = delta.days
             if days < 5:
                 self.send_message = True
+                self.save()
         else:
             days = None
         return days
