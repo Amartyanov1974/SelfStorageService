@@ -46,4 +46,5 @@ class BoxAdmin(admin.ModelAdmin):
 @admin.register(Order)
 class OrderAdmin(admin.ModelAdmin):
     list_display = ['pk', 'storage', 'box', 'client', 'price', 'paid']
+    list_filter = ["paid"]
     change_list_template = "admin/order.html"
