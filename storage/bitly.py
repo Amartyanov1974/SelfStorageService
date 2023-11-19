@@ -1,8 +1,14 @@
 from urllib.parse import urlsplit
 
 import requests
+from django.shortcuts import redirect, render
 from environs import Env
 
+from .models import LinkStatistics
+
+env = Env()
+env.read_env()
+token = env.str('BITLY_API_KEY')
 
 def shorten_link(url, token):
     headers = {
@@ -44,12 +50,17 @@ def is_bitlink(url, token):
     return response.ok
 
 
-def get_bitly_or_get_clicks_on_link(url):
-    env = Env()
-    env.read_env()
-    token = env.str('BITLY_API_KEY')
+def get_bitly_or_get_clicks_on_link(request):
+    link = 'https://github.com/'
+    bit_link = shorten_link(link, token)
+    return bit_link
 
-    if is_bitlink(url, token):
-        print('Количество переходов по ссылке битли:', get_count_clicks(url, token))
-    else:
-        print('Bitlink:', shorten_link(url, token))
+
+def handle_short_link(request, short_link):
+    print('shot_link', short_link)
+    # return render(request, 'track_link_click.html')
+    link, created = LinkStatistics.objects.get_or_create(bitlink=short_link)
+    # clicks_count = get_count_clicks(short_link, token)
+    link.transitions += 1
+    link.save()
+    return redirect(short_link)

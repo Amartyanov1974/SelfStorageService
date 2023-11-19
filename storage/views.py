@@ -1,5 +1,6 @@
 import datetime
 import random
+from urllib.parse import unquote
 
 import qrcode
 from django.conf import settings
@@ -10,12 +11,14 @@ from django.http import HttpResponse
 from django.shortcuts import redirect, render
 from django.template import loader
 
-from storage.actions import (
-    auth, deauth, registration, send_message, sendpasswd,
-    update_client, create_empty_order)
-from storage.models import Client, Storage, Box, Order
+from storage.actions import (auth, create_empty_order, deauth, registration,
+                             send_message, sendpasswd, update_client)
+from storage.models import Box, Client, Order, Storage
 
 User._meta.get_field('email')._unique = True
+from selfstorage.settings import BITLY_TOKEN
+from storage.bitly import get_bitly_or_get_clicks_on_link
+from storage.models import Client
 
 
 def index(request):
@@ -45,7 +48,11 @@ def index(request):
     elif 'user_name' in request.session:
         context = {
             'username': request.session['user_name'],
-        }
+            }
+    context = {
+            'bit_link': get_bitly_or_get_clicks_on_link(request),
+            }
+
     context['storages'] = Storage.objects.get_boxes()
     return render(request, 'index.html', context=context)
 
@@ -156,3 +163,60 @@ def create_order(request, box_id):
         }
 
     return render(request, 'order_confirmation.html', context)
+
+
+def storages(request):
+    context = {}
+    if 'user_name' in request.session:
+        context = {
+            'username': request.session['user_name'],
+            'storages': Storage.objects.get_boxes(),
+        }
+    else:
+        context = {
+            'storages': Storage.objects.get_boxes(),
+        }
+    return render(request, 'storages.html', context=context)
+
+
+def box_select(request, storage_id):
+    context = {}
+    boxes = Box.objects.filter(storage=storage_id, is_occupied=False).order_by('price')
+    if 'user_name' in request.session:
+        context = {
+            'username': request.session['user_name'],
+            'boxes': boxes,
+        }
+    else:
+        context = {
+            'boxes': boxes,
+        }
+    return render(request, 'box-select.html', context=context)
+
+
+def create_order(request, box_id):
+    context = {}
+    if 'user_name' in request.session:
+
+        box = Box.objects.get(id=box_id)
+        client = Client.objects.get(user=request.user)
+        order = Order.objects.create(
+            client=client, created_at=datetime.datetime.now(), box=box, price=box.price
+        )
+        context = {
+            'username': request.session['user_name'],
+            'order': order,
+        }
+
+    return render(request, 'order_confirmation.html', context)
+
+
+
+# def track_link_click(request):
+#     link_name = 'https://github.com/morozgit/ClickCount/blob/master/main.py'
+#     decoded_link_name = unquote(link_name)
+#     print(decoded_link_name)
+
+#     # Ваш код обработки, используя decoded_link_name
+
+#     return render(request, 'track_link_click.html')
