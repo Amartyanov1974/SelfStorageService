@@ -78,7 +78,6 @@ def deauth(request):
 
 def send_message(request):
     orders = Order.objects.filter(send_message=True)
-    print(orders)
     for order in orders:
         email = order.client.user_email
         box = order.box
