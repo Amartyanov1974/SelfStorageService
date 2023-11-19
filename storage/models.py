@@ -1,7 +1,11 @@
-from django.db import models
-from django.contrib.auth.models import User
-from django.db.models import Min, Max
 from datetime import datetime, timedelta, timezone
+
+import requests
+from django.contrib.auth.models import User
+from django.db import models
+from django.db.models import Max, Min
+
+from selfstorage.settings import BITLY_TOKEN
 
 
 class Client(models.Model):
@@ -147,3 +151,27 @@ class Order(models.Model):
     class Meta:
         verbose_name = 'Заказ'
         verbose_name_plural = 'Заказы'
+
+
+class LinkStatistics(models.Model):
+    def save(self, *args, **kwargs):
+        def shorten_link(token, link):
+            url = 'https://api-ssl.bitly.com/v4/bitlinks'
+            headers = {
+                "Authorization": f"Bearer {token}"
+            }
+            body = {
+                "long_url": link
+            }
+            response = requests.post(url, headers=headers, json=body)
+            response.raise_for_status()
+            bitlink = response.json()['link']
+            return bitlink
+
+        if self.link:
+            self.bitlink = shorten_link(BITLY_TOKEN, self.link)
+        super().save(*args, **kwargs)
+
+    link = models.CharField(max_length=200, verbose_name='Простая ссылка', null=True, blank=True)
+    bitlink = models.CharField(max_length=200, verbose_name='Bitly ссылка', null=True, blank=True)
+    transitions = models.IntegerField(verbose_name='Количество переходов по ссылке', null=True, blank=True, default=0)
