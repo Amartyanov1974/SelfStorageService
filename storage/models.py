@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.db.models import Min, Max
+from datetime import datetime, timedelta, timezone
 
 
 class Client(models.Model):
@@ -105,6 +106,7 @@ class Order(models.Model):
     end_date = models.DateField(verbose_name="Окончание хранения",
                                  null=True,
                                  blank=True)
+
     price = models.IntegerField(verbose_name='Стоимость',
                                 null=True,
                                 blank=True)
@@ -115,6 +117,17 @@ class Order(models.Model):
                             blank=True)
     paid = models.BooleanField(verbose_name='Оплачен',
                                     default=False)
+
+    send_message = models.BooleanField(verbose_name='Отправить уведомление',
+                                    default=False)
+
+    @property
+    def days_left(self):
+        delta = self.end_date - datetime.now().date()
+        days = delta.days
+        if days < 5:
+            self.send_message = True
+        return days
 
     @property
     def storage(self):
